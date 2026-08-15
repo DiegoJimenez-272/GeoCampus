@@ -120,13 +120,11 @@ function GLBBuilding({ onReady }) {
   return (
     <group>
       <primitive object={scene} dispose={null} />
-      {/* Suelo arquitectónico continuo limpio (sin corte triangular de sombra) */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]}>
-        <planeGeometry args={[500, 500]} />
-        <meshStandardMaterial color="#cbd5e1" roughness={0.9} metalness={0.0} />
+      {/* Base arquitectónica continua que se funde perfectamente con el horizonte */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.06, 0]}>
+        <planeGeometry args={[600, 600]} />
+        <meshStandardMaterial color="#e2e8f0" roughness={0.95} metalness={0.0} />
       </mesh>
-      {/* Retícula sutil estilo maqueta */}
-      <gridHelper args={[260, 65, '#94a3b8', '#e2e8f0']} position={[0, -0.04, 0]} />
     </group>
   )
 }
