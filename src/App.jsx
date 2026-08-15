@@ -11,6 +11,7 @@ import SearchUI from './components/SearchUI'
 import Lighting from './components/three/Lighting'
 import BuildingModel from './components/three/BuildingModel'
 import CameraController from './components/three/CameraController'
+import CityEnvironment from './components/three/CityEnvironment'
 
 import useAppStore from './store/useAppStore'
 
@@ -45,8 +46,8 @@ export default function App() {
         camera={{
           fov: 45,
           near: 0.5,
-          far: 500,
-          position: [55, 28, 65],
+          far: 1200,
+          position: [75, 45, 95],
         }}
         shadows
         dpr={[1, 2]}
@@ -59,11 +60,12 @@ export default function App() {
         }}
       >
         <Suspense fallback={null}>
-          {/* Fondo del cielo armonizado con niebla suave */}
+          {/* Fondo del cielo armonizado con niebla amplia para zoom lejano */}
           <color attach="background" args={['#e2e8f0']} />
-          <fog attach="fog" args={['#e2e8f0', 90, 300]} />
+          <fog attach="fog" args={['#e2e8f0', 250, 850]} />
           <Lighting />
           <CameraController />
+          <CityEnvironment />
           <BuildingModel />
         </Suspense>
       </Canvas>

@@ -80,10 +80,10 @@ export default function CameraController() {
       enableZoom={true}
       enableRotate={true}
       minPolarAngle={0}
-      maxPolarAngle={Math.PI / 2.1} // No bajar del suelo
+      maxPolarAngle={Math.PI / 2.05} // No bajar del suelo
       minDistance={2}
-      maxDistance={120}
-      target={[0, 1.5, 0]}
+      maxDistance={420} // Permite zoom amplio hacia atrás para ver todo el mapa de la ciudad
+      target={[0, 2.0, 0]}
       autoRotate={true}
       autoRotateSpeed={2.5}
       makeDefault
