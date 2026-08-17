@@ -11,7 +11,6 @@ import SearchUI from './components/SearchUI'
 import Lighting from './components/three/Lighting'
 import BuildingModel from './components/three/BuildingModel'
 import CameraController from './components/three/CameraController'
-import CityEnvironment from './components/three/CityEnvironment'
 
 import useAppStore from './store/useAppStore'
 
@@ -65,7 +64,6 @@ export default function App() {
           <fog attach="fog" args={['#e2e8f0', 250, 850]} />
           <Lighting />
           <CameraController />
-          <CityEnvironment />
           <BuildingModel />
         </Suspense>
       </Canvas>
