@@ -36,7 +36,7 @@ function ModelLoader() {
 }
 
 function GLBBuilding({ onReady }) {
-  const { scene } = useGLTF('/models/inacapestructura2.glb')
+  const { scene } = useGLTF('/models/inacap_prueba.glb')
   const selectedFloor = useAppStore((s) => s.selectedFloor)
   const meshesRef = useRef([])
   const readyRef = useRef(false)
@@ -143,7 +143,7 @@ export default function BuildingModel() {
       setLoadingProgress(Math.round(p))
     }, 200)
 
-    fetch('/models/inacapestructura2.glb', { method: 'HEAD' })
+    fetch('/models/inacap_prueba.glb', { method: 'HEAD' })
       .then((res) => {
         clearInterval(iv)
         setGlbFound(res.ok)
@@ -216,4 +216,4 @@ function FallbackBuilding({ onReady }) {
   )
 }
 
-useGLTF.preload('/models/inacapestructura2.glb')
+useGLTF.preload('/models/inacap_prueba.glb')
