@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react'
-import { useThree, useFrame } from '@react-three/fiber'
+import { useThree } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { gsap } from 'gsap'
 import useAppStore from '../../store/useAppStore'
@@ -64,15 +64,6 @@ export default function CameraController() {
 
   }, [selectedDestination])
 
-  // Normalizar la velocidad de rotación para que sea independiente de los FPS
-  // Three.js OrbitControls asume 60fps fijos por defecto. Multiplicar por (delta * 60) lo hace constante.
-  useFrame((state, delta) => {
-    if (controlsRef.current) {
-      // 2.5 es la velocidad base deseada
-      controlsRef.current.autoRotateSpeed = 2.5 * (delta * 60)
-    }
-  })
-
   return (
     <OrbitControls
       ref={controlsRef}
@@ -82,10 +73,9 @@ export default function CameraController() {
       minPolarAngle={0}
       maxPolarAngle={Math.PI / 2.05} // No bajar del suelo
       minDistance={2}
-      maxDistance={420} // Permite zoom amplio hacia atrás para ver todo el mapa de la ciudad
+      maxDistance={420} // Permite zoom amplio hacia atrás
       target={[0, 2.0, 0]}
-      autoRotate={true}
-      autoRotateSpeed={2.5}
+      autoRotate={false}
       makeDefault
     />
   )
