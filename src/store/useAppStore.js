@@ -31,6 +31,15 @@ const useAppStore = create((set, get) => ({
   },
   clearDestination: () => set({ selectedDestination: null }),
 
+  // ─── Vista: 'exterior' (orbita girando) | 'interior' (dentro del edificio)
+  viewMode: 'exterior',
+  enterBuilding: () => set({ viewMode: 'interior' }),
+  exitBuilding: () => set({ viewMode: 'exterior', selectedFloor: null, selectedDestination: null }),
+
+  // ─── Auto-rotación
+  autoRotateEnabled: true,
+  toggleAutoRotate: () => set((s) => ({ autoRotateEnabled: !s.autoRotateEnabled })),
+
   // ─── Coordenadas por defecto para la cámara (perspectiva 3/4 arquitectónica)
   cameraEntry: new THREE.Vector3(55, 28, 65),
   cameraFocusPoint: new THREE.Vector3(0, 3, 0),

@@ -35,7 +35,7 @@ function ModelLoader() {
   )
 }
 
-function GLBBuilding({ onReady }) {
+function GLBBuilding({ onReady, debugMarkers, setDebugMarkers }) {
   const { scene } = useGLTF('/models/inacap_prueba.glb')
   const selectedFloor = useAppStore((s) => s.selectedFloor)
   const meshesRef = useRef([])
@@ -118,8 +118,50 @@ function GLBBuilding({ onReady }) {
   }, [selectedFloor])
 
   return (
-    <group>
+    <group onClick={(e) => {
+      e.stopPropagation()
+      
+      // 1. Filtrar las intersecciones para ignorar techos o mallas altas flotantes
+      // Nos quedamos con el punto de impacto más bajo que siga estando dentro del piso actual
+      let validHit = e.intersections[0]
+      if (selectedFloor !== null) {
+        const currentFloorConfig = FLOORS_CONFIG.find(f => f.id === selectedFloor)
+        if (currentFloorConfig) {
+          const floorHits = e.intersections.filter(hit => 
+            hit.point.y >= currentFloorConfig.yMin && 
+            hit.point.y <= currentFloorConfig.yMin + 2.0 // Solo superficies bajas (suelo o mesas)
+          )
+          if (floorHits.length > 0) {
+            validHit = floorHits[0] // El primero es el más cercano a la cámara que cumple
+          }
+        }
+      }
+
+      const p = validHit.point
+      const meshName = validHit.object.name || 'Desconocido'
+      console.log(`📍 CLIC EN: [${p.x.toFixed(2)}, ${p.y.toFixed(2)}, ${p.z.toFixed(2)}] | Hit: ${meshName}`)
+      
+      // Agregar un marcador visual azul (reemplazando el anterior, solo queda 1)
+      if (setDebugMarkers) {
+        setDebugMarkers([{ x: p.x, y: p.y, z: p.z }])
+      }
+
+      const div = document.createElement('div')
+      div.innerHTML = `📍 [${p.x.toFixed(1)}, ${p.y.toFixed(1)}, ${p.z.toFixed(1)}]<br><span style="font-size:10px;color:#888;">Mesh: ${meshName}</span>`
+      div.style.cssText = 'position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:9999;background:#000;color:#0f0;padding:8px 16px;border-radius:8px;font-family:monospace;font-size:14px;text-align:center;'
+      document.body.appendChild(div)
+      setTimeout(() => div.remove(), 4000)
+    }}>
       <primitive object={scene} dispose={null} />
+      
+      {/* Renderizar los puntos azules donde se hizo clic */}
+      {debugMarkers?.map((pos, i) => (
+        <mesh key={i} position={[pos.x, pos.y, pos.z]}>
+          <sphereGeometry args={[0.3, 16, 16]} />
+          <meshBasicMaterial color="#3b82f6" />
+        </mesh>
+      ))}
+
       {/* Base arquitectónica continua que se funde perfectamente con el horizonte */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.06, 0]}>
         <planeGeometry args={[600, 600]} />
@@ -135,6 +177,7 @@ function GLBBuilding({ onReady }) {
 export default function BuildingModel() {
   const { phase, setPhase, setLoadingProgress } = useAppStore()
   const [glbFound, setGlbFound] = useState(null)
+  const [debugMarkers, setDebugMarkers] = useState([])
 
   useEffect(() => {
     let p = 0
@@ -174,7 +217,11 @@ export default function BuildingModel() {
   if (glbFound) {
     return (
       <Suspense fallback={<ModelLoader />}>
-        <GLBBuilding onReady={handleReady} />
+        <GLBBuilding 
+          onReady={handleReady} 
+          debugMarkers={debugMarkers} 
+          setDebugMarkers={setDebugMarkers} 
+        />
       </Suspense>
     )
   }

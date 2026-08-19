@@ -123,7 +123,7 @@ const destinations = [
     floorId: 2,
     icon: '📚',
     color: '#f59e0b',
-    position: new THREE.Vector3(0, 10.5, 4),
+    position: new THREE.Vector3(76.2, 8.9, 38.8),
     area: '180 m²',
     capacity: '80 personas',
     category: 'Estudio',
